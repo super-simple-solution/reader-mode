@@ -5,3 +5,9 @@
 .sss-blur {
   filter: blur(20px);
 }
+
+.sss-offset {
+  position: relative;
+  transition: transform .5s;
+  z-index: 99999;
+}

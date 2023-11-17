@@ -1,14 +1,30 @@
 import '@/style/index.scss'
+import { initEventHandler } from '@/utils/extension-action'
 import Focus from './blur'
+import { PatternData } from '@/types/local.d'
+
+const contentReq = {
+  'toggle-enable': toggleEnable,
+}
+
+initEventHandler(contentReq)
 
 let focusIns: Focus
 function init() {
   const domain = location.hostname
   chrome.storage.sync.get(domain).then((res) => {
-    const { selector, isFocus } = res[domain] || {}
-    if (selector) {
-      focusIns = new Focus(selector, isFocus)
-    }
+    const { autoFocus } = res[domain] || {}
+    chrome.runtime
+      .sendMessage({
+        greeting: 'to-get-pattern',
+        data: { domain },
+      })
+      .then((res: PatternData | null) => {
+        if (!res) return
+        if (res.selector) {
+          focusIns = new Focus(res.selector, autoFocus)
+        }
+      })
   })
 }
 
@@ -30,3 +46,8 @@ document.addEventListener(
   },
   false,
 )
+
+function toggleEnable(enable = true) {
+  if (!focusIns) return
+  enable ? focusIns?.init() : focusIns.unFocus()
+}

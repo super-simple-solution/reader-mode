@@ -1,5 +1,5 @@
 {
-  "name": "reader-mode",
+  "name": "reading-mode",
   "version": "0.0.1",
   "type": "module",
   "scripts": {
@@ -22,5 +22,8 @@
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-style-import": "^1.4.1",
     "vite-plugin-zip-pack": "^1.0.6"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.38.4"
   }
 }

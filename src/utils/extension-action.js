@@ -19,6 +19,16 @@ export function injectMunual() {
   injectScript(chrome.extension.getURL('/js/inject.js'), 'body')
 }
 
+export function getActiveTabId() {
+  return new Promise((resolve, reject) => {
+    chrome.tabs.query({ active: true, lastFocusedWindow: true }).then((tab) => {
+      const tabId = tab[0]?.id
+      if (!tabId) reject()
+      resolve(tabId)
+    })
+  })
+}
+
 export function injectCSS(file) {
   const head = document.head
   const s = document.createElement('link')
