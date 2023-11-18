@@ -10,6 +10,10 @@ const contentReq = {
   'to-save-detect-ele': toSaveDetectEle,
 }
 
+function domainMatch(domain) {
+  return (item) => domain.includes(item.domain)
+}
+
 const SYNC_HOUR = 3
 async function toGetPattern({ forceUpdate = false, domain }, sendResponse) {
   let {
@@ -19,8 +23,8 @@ async function toGetPattern({ forceUpdate = false, domain }, sendResponse) {
   } = await chrome.storage.local.get(['pattern_list_updated_at', 'pattern_list', 'domain_list'])
   localPatternList = localPatternList || []
   domain_list = domain_list || []
-  const domainTarget = domain_list.find((item) => item === domain)
-  const domainPattern = localPatternList.find((item) => item.domain === domain)
+  const domainTarget = domain_list.find(domainMatch(domain))
+  const domainPattern = localPatternList.find(domainMatch(domain))
   if (
     !forceUpdate &&
     localPatternList.length &&
@@ -38,7 +42,8 @@ async function toGetPattern({ forceUpdate = false, domain }, sendResponse) {
       .in('domain', domain ? [domain, '*'] : ['*']),
     dbTable().select('domain'),
   ])
-  sendResponse && sendResponse(patternList.find((item) => item.domain === domain || '*'))
+  sendResponse &&
+    sendResponse(patternList.find((item) => item.domain === domain || domain.includes(item.domain) || '*'))
   chrome.storage.local.set({
     pattern_list: patternList,
     domain_list: domainList.map((item) => item.domain),

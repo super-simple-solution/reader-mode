@@ -24,7 +24,7 @@ class Focus {
     target.classList.add(offsetClassName)
     setTimeout(() => {
       target.style.transform = `translateX(
-        ${Math.abs((document.body.clientWidth - target.offsetWidth) / 2 - target.getBoundingClientRect().left)}px
+        ${(document.body.clientWidth - target.offsetWidth) / 2 - target.getBoundingClientRect().left}px
       )`
     }, 50)
     this.isFocus = true
