@@ -17,14 +17,16 @@ class Focus {
     if (this.isFocus || !this.selector) return
     const target = document.querySelector(this.selector) as HTMLElement
     if (!target) return
-    this.originalTransform = target.style?.transform
+    this.originalTransform = window.getComputedStyle(target).transform
     passThrough(target, (element: HTMLElement) => {
       element.classList.add(blurClassName)
     })
     target.classList.add(offsetClassName)
-    target.style.transform = `translateX(
-      document.body.clientWidth - target.offsetWidth - target.getBoundingClientRect().left + 'px',
-    )`
+    setTimeout(() => {
+      target.style.transform = `translateX(
+        ${Math.abs((document.body.clientWidth - target.offsetWidth) / 2 - target.getBoundingClientRect().left)}px
+      )`
+    }, 50)
     this.isFocus = true
   }
 
@@ -35,8 +37,10 @@ class Focus {
     passThrough(target, (element: HTMLElement) => {
       element.classList.remove(blurClassName)
     })
-    target.classList.remove(offsetClassName)
     target.style.transform = this.originalTransform || ''
+    setTimeout(() => {
+      target.classList.remove(offsetClassName)
+    }, 600)
     this.isFocus = false
   }
 }

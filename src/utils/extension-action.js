@@ -21,7 +21,7 @@ export function injectMunual() {
 
 export function getActiveTabId() {
   return new Promise((resolve, reject) => {
-    chrome.tabs.query({ active: true, lastFocusedWindow: true }).then((tab) => {
+    chrome.tabs.query({ active: true }).then((tab) => {
       const tabId = tab[0]?.id
       if (!tabId) reject()
       resolve(tabId)
