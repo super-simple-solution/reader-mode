@@ -1,13 +1,14 @@
-const blurClassName = 'sss-blur'
-const offsetClassName = 'sss-offset'
+const attributeKey = 'data-mark'
+const blurStyle = 'sss-blur'
+const offsetStyle = 'sss-offset'
 
 class Focus {
   selector: string
   isFocus: boolean = false
   originalTransform: string = ''
-  constructor(selector: string, autoFocus?: boolean) {
+  constructor(selector: string, auto_focus?: boolean) {
     this.selector = selector
-    if (autoFocus) {
+    if (auto_focus) {
       this.init()
       this.isFocus = true
     }
@@ -19,9 +20,9 @@ class Focus {
     if (!target) return
     this.originalTransform = window.getComputedStyle(target).transform
     passThrough(target, (element: HTMLElement) => {
-      element.classList.add(blurClassName)
+      element.setAttribute(attributeKey, blurStyle)
     })
-    target.classList.add(offsetClassName)
+    target.setAttribute(attributeKey, offsetStyle)
     setTimeout(() => {
       target.style.transform = `translateX(
         ${(document.body.clientWidth - target.offsetWidth) / 2 - target.getBoundingClientRect().left}px
@@ -35,11 +36,11 @@ class Focus {
     const target = document.querySelector(this.selector) as HTMLElement
     if (!target) return
     passThrough(target, (element: HTMLElement) => {
-      element.classList.remove(blurClassName)
+      element.removeAttribute(attributeKey)
     })
     target.style.transform = this.originalTransform || ''
     setTimeout(() => {
-      target.classList.remove(offsetClassName)
+      target.removeAttribute(attributeKey)
     }, 600)
     this.isFocus = false
   }

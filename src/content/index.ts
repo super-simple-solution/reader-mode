@@ -1,6 +1,8 @@
 import '@/style/index.scss'
+import { isEmpty } from '@/utils'
 import { initEventHandler } from '@/utils/extension-action'
 import Focus from './blur'
+import { NON_AUTO_KEY } from '@/const'
 import { PatternData } from '@/types/local.d'
 
 const contentReq = {
@@ -12,8 +14,9 @@ initEventHandler(contentReq)
 let focusIns: Focus
 function init() {
   const domain = location.hostname
-  chrome.storage.sync.get(domain).then((res) => {
-    const { autoFocus } = res[domain] || {}
+  chrome.storage.sync.get(NON_AUTO_KEY).then(({ [NON_AUTO_KEY]: domainList }) => {
+    const auto_focus =
+      !domainList || isEmpty(domainList) || !domainList.find((item: string) => domain === item || item.endsWith(domain))
     chrome.runtime
       .sendMessage({
         greeting: 'to-get-pattern',
@@ -22,7 +25,7 @@ function init() {
       .then((res: PatternData | null) => {
         if (!res) return
         if (res.selector) {
-          focusIns = new Focus(res.selector, autoFocus)
+          focusIns = new Focus(res.selector, auto_focus)
         }
       })
   })

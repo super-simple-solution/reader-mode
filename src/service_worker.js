@@ -11,11 +11,11 @@ const contentReq = {
 }
 
 function domainMatch(domain) {
-  return (item) => domain.includes(item.domain)
+  return (item) => domain === item.domain || domain.endsWith(item.domain)
 }
 
 const SYNC_HOUR = 3
-async function toGetPattern({ forceUpdate = false, domain }, sendResponse) {
+async function toGetPattern({ forceUpdate = false, domain = '' }, sendResponse) {
   let {
     pattern_list_updated_at,
     pattern_list: localPatternList,
@@ -43,7 +43,7 @@ async function toGetPattern({ forceUpdate = false, domain }, sendResponse) {
     dbTable().select('domain'),
   ])
   sendResponse &&
-    sendResponse(patternList.find((item) => item.domain === domain || domain.includes(item.domain) || '*'))
+    sendResponse(patternList.find((item) => item.domain === domain || domain.endsWith(item.domain) || '*'))
   chrome.storage.local.set({
     pattern_list: patternList,
     domain_list: domainList.map((item) => item.domain),

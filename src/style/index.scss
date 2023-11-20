@@ -1,9 +1,11 @@
-.sss-blur {
+// use attribute to avoid original website js change classname 
+[data-mark="sss-blur"] {
   filter: blur(20px);
 }
 
-.sss-offset {
+[data-mark="sss-offset"] {
   position: relative;
   transition: transform .5s;
-  z-index: 1;
+  z-index: 99999;
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 }

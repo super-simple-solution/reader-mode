@@ -19,12 +19,11 @@ export function injectMunual() {
   injectScript(chrome.extension.getURL('/js/inject.js'), 'body')
 }
 
-export function getActiveTabId() {
+export function getActiveTab(options = { currentWindow: true }) {
   return new Promise((resolve, reject) => {
-    chrome.tabs.query({ active: true }).then((tab) => {
-      const tabId = tab[0]?.id
-      if (!tabId) reject()
-      resolve(tabId)
+    chrome.tabs.query({ active: true, ...options }).then((tab) => {
+      if (!tab[0]) reject()
+      resolve(tab[0])
     })
   })
 }

@@ -1,8 +1,8 @@
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 40px;
+  height: 24px;
 }
 
 .switch input { 
@@ -26,8 +26,8 @@
 .slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
+  height: 16px;
+  width: 16px;
   left: 4px;
   bottom: 4px;
   background-color: white;
@@ -44,9 +44,7 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  transform: translateX(16px);
 }
 
 /* Rounded sliders */
@@ -62,22 +60,18 @@ input:checked + .slider:before {
   height: 400px;
   background-color: #F5F5F5;
   padding: 0 30px;
-  @apply flex justify-center flex-col items-center;
 }
 
 .detect {
   width: 150px;
   height: 52px;
-  @apply flex justify-center items-center bg-white text-[#000] hover:shadow-xl hover:text-[#7ED161] cursor-pointer ;
 }
 
 .btn-container {
   margin-top: 40px;
-  @apply flex justify-between w-full;
 }
 
 .btn {
   width: 100px;
   height: 48px;
-  @apply flex justify-center items-center hover:shadow-xl hover:text-[#7ED161] bg-white text-[#000]  cursor-pointer;
 }

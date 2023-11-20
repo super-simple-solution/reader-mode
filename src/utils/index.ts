@@ -40,3 +40,12 @@ export function createEle(option: {
 export function getNumber(str: string | null | undefined): number {
   return Number((str || '').replace(/[^(\d|.)]/g, ''))
 }
+
+export function isEmpty(obj: object) {
+  for (const prop in obj) {
+    if (Object.hasOwn(obj, prop)) {
+      return false
+    }
+  }
+  return true
+}
