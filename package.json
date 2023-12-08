@@ -24,6 +24,7 @@
     "vite-plugin-zip-pack": "^1.0.6"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.38.4"
+    "@supabase/supabase-js": "^2.38.4",
+    "hotkeys-js": "^3.13.0"
   }
 }

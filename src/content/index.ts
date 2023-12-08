@@ -1,3 +1,4 @@
+import hotkeys from 'hotkeys-js'
 import '@/style/index.scss'
 import { isEmpty } from '@/utils'
 import { initEventHandler } from '@/utils/extension-action'
@@ -33,22 +34,17 @@ function init() {
 
 init()
 
-const keyCodeMap = {
-  esc: 'Escape',
-  top: 'ArrowUp',
-}
-
-document.addEventListener(
-  'keydown',
-  (e) => {
-    if (keyCodeMap.esc === e.code) {
-      focusIns && focusIns.unFocus()
-    } else if (keyCodeMap.top === e.code) {
+hotkeys('shift+up,esc', function (event: KeyboardEvent, handler) {
+  switch (handler.key) {
+    case 'shift+up':
       focusIns && focusIns.init()
-    }
-  },
-  false,
-)
+      break
+    case 'esc':
+      focusIns && focusIns.unFocus()
+      break
+    default:
+  }
+})
 
 function toggleEnable(enable = true) {
   if (!focusIns) return
