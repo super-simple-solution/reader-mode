@@ -18,7 +18,8 @@
     "prettier-plugin-tailwindcss": "^0.2.8",
     "sass": "^1.63.6",
     "tailwindcss": "^3.3.2",
-    "vite": "^4.3.9",
+    "typescript": "^5.3.3",
+    "vite": "^4.5.1",
     "vite-plugin-eslint": "^1.8.1",
     "vite-plugin-style-import": "^1.4.1",
     "vite-plugin-zip-pack": "^1.0.6"
