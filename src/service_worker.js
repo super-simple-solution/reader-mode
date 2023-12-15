@@ -32,8 +32,8 @@ async function toGetPattern({ forceUpdate = false, domain = '' }, sendResponse) 
     ((domainTarget && domainPattern) || !domainTarget) &&
     Date.now() - pattern_list_updated_at <= 1000 * 60 * 60 * SYNC_HOUR
   ) {
-    if (!sendResponse || !domainPattern) return
-    sendResponse(domainPattern)
+    if (!sendResponse) return
+    sendResponse(domainPattern || localPatternList[0])
     return
   }
   const [{ data: patternList }, { data: domainList }] = await Promise.all([

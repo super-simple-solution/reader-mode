@@ -1,6 +1,6 @@
 {
-  "name": "focused-read",
-  "version": "0.0.1",
+  "name": "reading-mode",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",

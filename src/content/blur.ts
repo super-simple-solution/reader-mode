@@ -17,7 +17,7 @@ class Focus {
 
   init() {
     if (this.isFocus || !this.selector) return
-    const target = getEleBySelectorList(this.selector) as HTMLElement
+    const target = getEleBySelectorList(this.selector, nodeFilter) as HTMLElement
     if (!target) return
     this.originalTransform = window.getComputedStyle(target).transform
     passThrough(target, (element: HTMLElement) => {
@@ -34,7 +34,7 @@ class Focus {
 
   unFocus() {
     if (!this.isFocus || !this.selector) return
-    const target = getEleBySelectorList(this.selector) as HTMLElement
+    const target = getEleBySelectorList(this.selector, nodeFilter) as HTMLElement
     if (!target) return
     passThrough(target, (element: HTMLElement) => {
       element.removeAttribute(attributeKey)
@@ -57,6 +57,11 @@ function passThrough(element: HTMLElement, fn: (element: HTMLElement) => undefin
     if (elementList[i] === element) continue
     fn(elementList[i] as HTMLElement)
   }
+}
+
+function nodeFilter(element: Element): boolean {
+  const content = element.textContent
+  return !!content && content.length > 200
 }
 
 export default Focus
