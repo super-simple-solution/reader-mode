@@ -1,12 +1,13 @@
+import { getEleBySelectorList } from '@/utils'
 const attributeKey = 'data-mark'
 const blurStyle = 'sss-blur'
 const offsetStyle = 'sss-offset'
 
 class Focus {
-  selector: string
+  selector: string[]
   isFocus: boolean = false
   originalTransform: string = ''
-  constructor(selector: string, auto_focus?: boolean) {
+  constructor(selector: string[], auto_focus?: boolean) {
     this.selector = selector
     if (auto_focus) {
       this.init()
@@ -16,7 +17,7 @@ class Focus {
 
   init() {
     if (this.isFocus || !this.selector) return
-    const target = document.querySelector(this.selector) as HTMLElement
+    const target = getEleBySelectorList(this.selector) as HTMLElement
     if (!target) return
     this.originalTransform = window.getComputedStyle(target).transform
     passThrough(target, (element: HTMLElement) => {
@@ -33,7 +34,7 @@ class Focus {
 
   unFocus() {
     if (!this.isFocus || !this.selector) return
-    const target = document.querySelector(this.selector) as HTMLElement
+    const target = getEleBySelectorList(this.selector) as HTMLElement
     if (!target) return
     passThrough(target, (element: HTMLElement) => {
       element.removeAttribute(attributeKey)

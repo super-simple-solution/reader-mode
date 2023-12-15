@@ -37,6 +37,17 @@ export function createEle(option: {
   return el
 }
 
+export function getEleBySelectorList(selector: string[] | string) {
+  let selectorList = selector
+  if (typeof selector === 'string') selectorList = [selector]
+  let elRes
+  for (const selector of selectorList) {
+    elRes = getEle(selector)
+    if (elRes) break
+  }
+  return elRes
+}
+
 export function getNumber(str: string | null | undefined): number {
   return Number((str || '').replace(/[^(\d|.)]/g, ''))
 }
