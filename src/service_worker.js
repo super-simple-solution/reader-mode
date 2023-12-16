@@ -47,7 +47,7 @@ async function toGetPattern({ forceUpdate = false, domain = '' }, sendResponse) 
   const [{ data: patternList }, { data: domainList }] = await Promise.all([
     dbTable()
       .select('domain,selector')
-      .in('domain', domain ? [domain, '*'] : ['*']),
+      .in('domain', domain ? [domain, domain.match(/[^.]+\.\w+$/)[0], '*'] : ['*']),
     dbTable().select('domain'),
   ])
   sendResponse && sendResponse(patternList.find(domainPropertyMatch(domain, true)))
