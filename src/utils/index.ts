@@ -37,9 +37,7 @@ export function createEle(option: {
   return el
 }
 
-export function getEleBySelectorList(selector: string[] | string, filter: (element: Element) => boolean = () => true) {
-  let selectorList = selector
-  if (typeof selector === 'string') selectorList = [selector]
+export function getEleBySelectorList(selectorList: string[], filter: (element: Element) => boolean = () => true) {
   let elRes
   for (const selector of selectorList) {
     elRes = getEle(selector)

@@ -11,7 +11,15 @@ const contentReq = {
 }
 
 function domainMatch(domain) {
-  return (item) => domain === item.domain || domain.endsWith(item.domain)
+  return (item) => domain === item || domain.endsWith(item)
+}
+
+function domainPropertyMatch(domain, isGeneric = false) {
+  return (item) => {
+    let curDomain = item.domain
+    let res = domain === curDomain || domain.endsWith(curDomain)
+    return isGeneric ? res || curDomain === '*' : res
+  }
 }
 
 const SYNC_HOUR = 3
@@ -24,7 +32,7 @@ async function toGetPattern({ forceUpdate = false, domain = '' }, sendResponse) 
   localPatternList = localPatternList || []
   domain_list = domain_list || []
   const domainTarget = domain_list.find(domainMatch(domain))
-  const domainPattern = localPatternList.find(domainMatch(domain))
+  const domainPattern = localPatternList.find(domainPropertyMatch(domain))
   if (
     !forceUpdate &&
     localPatternList.length &&
@@ -33,17 +41,16 @@ async function toGetPattern({ forceUpdate = false, domain = '' }, sendResponse) 
     Date.now() - pattern_list_updated_at <= 1000 * 60 * 60 * SYNC_HOUR
   ) {
     if (!sendResponse) return
-    sendResponse(domainPattern || localPatternList[0])
+    sendResponse(domainPattern || localPatternList.find((item) => item.domain === '*'))
     return
   }
   const [{ data: patternList }, { data: domainList }] = await Promise.all([
     dbTable()
       .select('domain,selector')
-      .in('domain', domain ? [domain, '*'] : ['*']),
+      .in('domain', domain ? [domain, domain.match(/[^.]+\.\w+$/)[0], '*'] : ['*']),
     dbTable().select('domain'),
   ])
-  sendResponse &&
-    sendResponse(patternList.find((item) => item.domain === domain || domain.endsWith(item.domain) || '*'))
+  sendResponse && sendResponse(patternList.find(domainPropertyMatch(domain, true)))
   chrome.storage.local.set({
     pattern_list: patternList,
     domain_list: domainList.map((item) => item.domain),
