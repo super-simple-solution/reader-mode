@@ -1,4 +1,7 @@
 // use attribute to avoid original website js change classname 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 [data-mark="sss-blur"] {
   filter: blur(20px);
 }

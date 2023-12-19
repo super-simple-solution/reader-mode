@@ -4,6 +4,7 @@ import { getActiveTab } from '@/utils/extension-action'
 import { NON_AUTO_KEY } from '@/const'
 
 const detectEle = document.querySelector('.detect')
+const blockEle = document.querySelector('.block-element')
 const switchEle = document.getElementById('switch') as HTMLInputElement
 getActiveTab().then(({ url }) => {
   const domain = new URL(url).hostname
@@ -22,8 +23,12 @@ detectEle?.addEventListener('click', () => {
   getActiveTab().then(({ id }) => chrome.tabs.sendMessage(id, { greeting: 'to-detect' }))
 })
 
+blockEle?.addEventListener('click', () => {
+  console.log(111)
+})
+
 switchEle?.addEventListener('change', () => {
-  console.log()
+  console.log(44444)
   getActiveTab()
     .then(({ id, url }) => {
       const checked = switchEle.checked
