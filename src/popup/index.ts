@@ -5,6 +5,7 @@ import { NON_AUTO_KEY } from '@/const'
 
 const detectEle = document.querySelector('.detect')
 const blockEle = document.querySelector('.block-element')
+const cancelEle = document.querySelector('.cancel-element')
 const switchEle = document.getElementById('switch') as HTMLInputElement
 getActiveTab().then(({ url }) => {
   const domain = new URL(url).hostname
@@ -24,11 +25,17 @@ detectEle?.addEventListener('click', () => {
 })
 
 blockEle?.addEventListener('click', () => {
-  console.log(111)
+  blockEle.setAttribute('style', 'display: none')
+  cancelEle?.setAttribute('style', 'display: block')
+  getActiveTab().then(({ id }) => chrome.tabs.sendMessage(id, { greeting: 'block-element' }))
+})
+cancelEle?.addEventListener('click', () => {
+  blockEle?.setAttribute('style', 'display: block')
+  cancelEle?.setAttribute('style', 'display: none')
+  getActiveTab().then(({ id }) => chrome.tabs.sendMessage(id, { greeting: 'cancel-element' }))
 })
 
 switchEle?.addEventListener('change', () => {
-  console.log(44444)
   getActiveTab()
     .then(({ id, url }) => {
       const checked = switchEle.checked

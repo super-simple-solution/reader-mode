@@ -50,10 +50,10 @@ async function toGetPattern({ forceUpdate = false, domain = '' }, sendResponse) 
       .in('domain', domain ? [domain, domain.match(/[^.]+\.\w+$/)[0], '*'] : ['*']),
     dbTable().select('domain'),
   ])
-  sendResponse && sendResponse(patternList.find(domainPropertyMatch(domain, true)))
+  sendResponse && sendResponse((patternList || []).find(domainPropertyMatch(domain, true)))
   chrome.storage.local.set({
     pattern_list: patternList,
-    domain_list: domainList.map((item) => item.domain),
+    domain_list: (domainList || []).map((item) => item.domain),
     pattern_list_updated_at: Date.now(),
   })
 }

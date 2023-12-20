@@ -8,6 +8,8 @@ import { PatternData } from '@/types/local.d'
 
 const contentReq = {
   'toggle-enable': toggleEnable,
+  'block-element': blockElement,
+  'cancel-element': cancelElement,
 }
 
 initEventHandler(contentReq)
@@ -49,4 +51,14 @@ hotkeys('shift+up,esc', function (event: KeyboardEvent, handler) {
 function toggleEnable(enable = true) {
   if (!focusIns) return
   enable ? focusIns?.init() : focusIns.unFocus()
+}
+
+function blockElement() {
+  document.addEventListener('mousemove', function (event) {
+    console.log(event, 4444)
+  })
+}
+
+function cancelElement() {
+  console.log('cancel')
 }
