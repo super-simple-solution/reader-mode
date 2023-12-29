@@ -8,6 +8,7 @@ function dbTable() {
 const contentReq = {
   'to-get-pattern': toGetPattern,
   'to-save-detect-ele': toSaveDetectEle,
+  'to-open-window': toOpenWindow,
 }
 
 function domainMatch(domain) {
@@ -69,6 +70,18 @@ async function toSaveDetectEle(params, sendResponse) {
     sendResponse && sendResponse(data[0])
     refreshPattern()
   }
+}
+
+function toOpenWindow() {
+  chrome.windows.create({
+    url: 'src/window/index.html',
+    type: 'popup',
+    width: 600,
+    height: 300,
+    focused: true,
+    left: 0,
+    top: 0,
+  })
 }
 
 function refreshPattern() {

@@ -11,6 +11,7 @@ const contentReq = {
   'block-element': blockElement,
   'cancel-element': cancelElement,
 }
+const selectedClass = 'sss-select'
 
 initEventHandler(contentReq)
 
@@ -54,9 +55,31 @@ function toggleEnable(enable = true) {
 }
 
 function blockElement() {
-  document.addEventListener('mousemove', function (event) {
-    console.log(event, 4444)
+  document.body.addEventListener('mouseover', (event: MouseEvent) => {
+    const target = event.target as HTMLElement
+    target.classList.add(selectedClass)
   })
+  document.body.addEventListener('mouseout', (event: MouseEvent) => {
+    const target = event.target as HTMLElement
+    target.classList.remove(selectedClass)
+  })
+  document.body.addEventListener('click', (event: MouseEvent) => {
+    const target = event.target as HTMLElement
+    console.log(target)
+    // window.open('assets/icons/128.png', '', 'width=600, height=300')
+    if (!target.classList?.contains(selectedClass)) return
+    openWindow()
+  })
+}
+
+function openWindow() {
+  chrome.runtime
+    .sendMessage({
+      greeting: 'to-open-window',
+    })
+    .then(() => {
+      console.log('openwindow')
+    })
 }
 
 function cancelElement() {
