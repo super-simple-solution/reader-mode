@@ -8,10 +8,11 @@ import { PatternData } from '@/types/local.d'
 
 const contentReq = {
   'toggle-enable': toggleEnable,
-  'block-element': blockElement,
-  'cancel-element': cancelElement,
+  'to-detect': toDetect,
+  'to-cancel': toCancel,
+  'to-preview': toPreview,
 }
-const selectedClass = 'sss-select'
+const detectClass = 'sss-detect'
 
 initEventHandler(contentReq)
 
@@ -54,34 +55,44 @@ function toggleEnable(enable = true) {
   enable ? focusIns?.init() : focusIns.unFocus()
 }
 
-function blockElement() {
+let isClick = false
+let target: HTMLElement
+function toDetect() {
   document.body.addEventListener('mouseover', (event: MouseEvent) => {
+    if (isClick) return
     const target = event.target as HTMLElement
-    target.classList.add(selectedClass)
+    target.classList.add(detectClass)
   })
   document.body.addEventListener('mouseout', (event: MouseEvent) => {
+    if (isClick) return
     const target = event.target as HTMLElement
-    target.classList.remove(selectedClass)
+    target.classList.remove(detectClass)
   })
   document.body.addEventListener('click', (event: MouseEvent) => {
-    const target = event.target as HTMLElement
-    console.log(target)
-    // window.open('assets/icons/128.png', '', 'width=600, height=300')
-    if (!target.classList?.contains(selectedClass)) return
-    openWindow()
+    target = event.target as HTMLElement
+    if (!target.classList?.contains(detectClass)) return
+    openWindow(target)
+    isClick = true
   })
 }
 
-function openWindow() {
+function toPreview() {
+  if (!target.classList?.contains(detectClass)) return
+  target.classList.add('sss-preview')
+}
+
+function openWindow(target: HTMLElement) {
   chrome.runtime
     .sendMessage({
       greeting: 'to-open-window',
+      data: 111,
     })
     .then(() => {
-      console.log('openwindow')
+      console.log(target, 'openwindow')
     })
 }
 
-function cancelElement() {
+function toCancel() {
+  isClick = false
   console.log('cancel')
 }

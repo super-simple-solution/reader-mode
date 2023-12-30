@@ -73,11 +73,6 @@ input:checked + .slider:before {
   padding: 0 30px;
 }
 
-.detect {
-  width: 150px;
-  height: 52px;
-}
-
 .btn-container {
   margin-top: 40px;
 }
@@ -87,7 +82,7 @@ input:checked + .slider:before {
   height: 48px;
 }
 
-.detect-btn {
+.detect-btn{
   margin: 20px 0;
   cursor: pointer;
   width: 100%;
@@ -97,10 +92,10 @@ input:checked + .slider:before {
   text-align: center;
   line-height: 50px;
 }
-.block-element {
+.block{
   display: block;
 }
 
-.cancel-element {
+.cancel {
   display: none;
 }

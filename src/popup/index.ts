@@ -4,8 +4,7 @@ import { getActiveTab } from '@/utils/extension-action'
 import { NON_AUTO_KEY } from '@/const'
 
 const detectEle = document.querySelector('.detect')
-const blockEle = document.querySelector('.block-element')
-const cancelEle = document.querySelector('.cancel-element')
+const cancelEle = document.querySelector('.cancel')
 const switchEle = document.getElementById('switch') as HTMLInputElement
 getActiveTab().then(({ url }) => {
   const domain = new URL(url).hostname
@@ -20,19 +19,14 @@ getActiveTab().then(({ url }) => {
 })
 
 detectEle?.addEventListener('click', () => {
-  // if ((e.target as Element).className !== 'btn') return
+  detectEle.setAttribute('style', 'display: none')
+  cancelEle?.setAttribute('style', 'display: block')
   getActiveTab().then(({ id }) => chrome.tabs.sendMessage(id, { greeting: 'to-detect' }))
 })
-
-blockEle?.addEventListener('click', () => {
-  blockEle.setAttribute('style', 'display: none')
-  cancelEle?.setAttribute('style', 'display: block')
-  getActiveTab().then(({ id }) => chrome.tabs.sendMessage(id, { greeting: 'block-element' }))
-})
 cancelEle?.addEventListener('click', () => {
-  blockEle?.setAttribute('style', 'display: block')
+  detectEle?.setAttribute('style', 'display: block')
   cancelEle?.setAttribute('style', 'display: none')
-  getActiveTab().then(({ id }) => chrome.tabs.sendMessage(id, { greeting: 'cancel-element' }))
+  getActiveTab().then(({ id }) => chrome.tabs.sendMessage(id, { greeting: 'to-cancel' }))
 })
 
 switchEle?.addEventListener('change', () => {
