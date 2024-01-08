@@ -1,16 +1,15 @@
 // use attribute to avoid original website js change classname 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 [data-mark="sss-blur"] {
   filter: blur(20px);
+  >*{
+    filter: grayscale(1);
+  }
 }
 
 [data-mark="sss-offset"] {
   position: relative;
   transition: transform .5s;
-  z-index: 99999;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  z-index: 1;
 }
 
 .sss-detect {

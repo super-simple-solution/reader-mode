@@ -3,8 +3,11 @@ import '@/style/index.scss'
 import { isEmpty } from '@/utils'
 import { initEventHandler } from '@/utils/extension-action'
 import Focus from './blur'
+import { Detect } from '@/lib/detect'
 import { NON_AUTO_KEY } from '@/const'
 import { PatternData } from '@/types/local.d'
+
+let detectInstance: Detect | null = null
 
 const contentReq = {
   'toggle-enable': toggleEnable,
@@ -12,7 +15,21 @@ const contentReq = {
   'to-cancel': toCancel,
   'to-preview': toPreview,
 }
-const detectClass = 'sss-detect'
+
+function toDetect() {
+  if (!detectInstance) {
+    detectInstance = new Detect()
+  }
+  detectInstance.toDetect()
+}
+
+function toCancel() {
+  detectInstance && detectInstance.toCancel()
+}
+
+function toPreview() {
+  detectInstance && detectInstance.toPreview()
+}
 
 initEventHandler(contentReq)
 
@@ -53,46 +70,4 @@ hotkeys('shift+up,esc', function (event: KeyboardEvent, handler) {
 function toggleEnable(enable = true) {
   if (!focusIns) return
   enable ? focusIns?.init() : focusIns.unFocus()
-}
-
-let isClick = false
-let target: HTMLElement
-function toDetect() {
-  document.body.addEventListener('mouseover', (event: MouseEvent) => {
-    if (isClick) return
-    const target = event.target as HTMLElement
-    target.classList.add(detectClass)
-  })
-  document.body.addEventListener('mouseout', (event: MouseEvent) => {
-    if (isClick) return
-    const target = event.target as HTMLElement
-    target.classList.remove(detectClass)
-  })
-  document.body.addEventListener('click', (event: MouseEvent) => {
-    target = event.target as HTMLElement
-    if (!target.classList?.contains(detectClass)) return
-    openWindow(target)
-    isClick = true
-  })
-}
-
-function toPreview() {
-  if (!target.classList?.contains(detectClass)) return
-  target.classList.add('sss-preview')
-}
-
-function openWindow(target: HTMLElement) {
-  chrome.runtime
-    .sendMessage({
-      greeting: 'to-open-window',
-      data: 111,
-    })
-    .then(() => {
-      console.log(target, 'openwindow')
-    })
-}
-
-function toCancel() {
-  isClick = false
-  console.log('cancel')
 }
