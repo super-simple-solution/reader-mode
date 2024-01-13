@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@supabase/supabase-js':
     specifier: ^2.38.4
@@ -7,6 +11,9 @@ dependencies:
   hotkeys-js:
     specifier: ^3.13.0
     version: registry.npmmirror.com/hotkeys-js@3.13.1
+  toastify-js:
+    specifier: ^1.12.0
+    version: 1.12.0
 
 devDependencies:
   '@crxjs/vite-plugin':
@@ -15,6 +22,9 @@ devDependencies:
   '@types/chrome':
     specifier: ^0.0.244
     version: registry.npmmirror.com/@types/chrome@0.0.244
+  '@types/toastify-js':
+    specifier: ^1.12.3
+    version: 1.12.3
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.3.0
     version: registry.npmmirror.com/@typescript-eslint/eslint-plugin@6.14.0(@typescript-eslint/parser@6.14.0)(eslint@8.55.0)(typescript@5.3.3)
@@ -258,6 +268,10 @@ packages:
     dev: true
     optional: true
 
+  /@types/toastify-js@1.12.3:
+    resolution: {integrity: sha512-9RjLlbAHMSaae/KZNHGv19VG4gcLIm3YjvacCXBtfMfYn26h76YP5oxXI8k26q4iKXCB9LNfv18lsoS0JnFPTg==}
+    dev: true
+
   /fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -271,6 +285,10 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
+
+  /toastify-js@1.12.0:
+    resolution: {integrity: sha512-HeMHCO9yLPvP9k0apGSdPUWrUbLnxUKNFzgUoZp1PHCLploIX/4DSQ7V8H25ef+h4iO9n0he7ImfcndnN6nDrQ==}
+    dev: false
 
   registry.npmmirror.com/@aashutoshrathi/word-wrap@1.2.6:
     resolution: {integrity: sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==, registry: https://registry.npmjs.org/, tarball: https://registry.npmmirror.com/@aashutoshrathi/word-wrap/-/word-wrap-1.2.6.tgz}
