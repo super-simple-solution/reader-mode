@@ -1,11 +1,11 @@
-export function getEle(el: string, context?: Element | null) {
-  if (!el) return
-  return (context || document).querySelector(el)
+export function getEle(selector: string, context?: Element | null) {
+  if (!selector) return
+  return (context || document.body).querySelector(selector)
 }
 
-export function $$(el: string, context?: Element | null) {
-  if (!el) return []
-  return Array.from((context || document).querySelectorAll(el))
+export function $$(selector: string, context?: Element | null) {
+  if (!selector) return []
+  return Array.from((context || document.body).querySelectorAll(selector))
 }
 
 interface DynamicObject {
