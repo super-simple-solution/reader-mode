@@ -24,11 +24,11 @@ function toDetect() {
 }
 
 function toCancel() {
-  detectInstance && detectInstance.toCancel()
+  detectInstance && detectInstance.cancel()
 }
 
-function toPreview() {
-  detectInstance && detectInstance.toPreview()
+function toPreview({ selector }: { selector: string }) {
+  detectInstance && detectInstance.preview(selector)
 }
 
 initEventHandler(contentReq)

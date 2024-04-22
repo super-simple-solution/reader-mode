@@ -1,53 +1,13 @@
 import './style.scss'
-import { isEmpty } from '@/utils'
-import { getActiveTab } from '@/utils/extension-action'
+import Switcher from './switch'
+import { DetectTrigger } from '@/lib/detect'
+
+const detectEle = document.querySelector('.detect') as HTMLElement
+const cancelEle = document.querySelector('.cancel') as HTMLElement
+
+new DetectTrigger(detectEle, cancelEle)
+
 import { NON_AUTO_KEY } from '@/const'
-
-const detectEle = document.querySelector('.detect')
-const cancelEle = document.querySelector('.cancel')
 const switchEle = document.getElementById('switch') as HTMLInputElement
-getActiveTab().then(({ url }) => {
-  const domain = new URL(url).hostname
-  chrome.storage.sync.get(NON_AUTO_KEY).then(({ [NON_AUTO_KEY]: domainList }) => {
-    const auto_focus =
-      !domainList || isEmpty(domainList) || !domainList.find((item: string) => domain === item || item.endsWith(domain))
-    debugger
-    console.log(domainList, 'domainList')
-    console.log(auto_focus, 'auto_focus')
-    switchEle.checked = auto_focus
-  })
-})
 
-detectEle?.addEventListener('click', () => {
-  detectEle.setAttribute('style', 'display: none')
-  cancelEle?.setAttribute('style', 'display: block')
-  getActiveTab().then(({ id }) => chrome.tabs.sendMessage(id, { greeting: 'to-detect' }))
-})
-cancelEle?.addEventListener('click', () => {
-  detectEle?.setAttribute('style', 'display: block')
-  cancelEle?.setAttribute('style', 'display: none')
-  getActiveTab().then(({ id }) => chrome.tabs.sendMessage(id, { greeting: 'to-cancel' }))
-})
-
-switchEle?.addEventListener('change', () => {
-  getActiveTab()
-    .then(({ id, url }) => {
-      const checked = switchEle.checked
-      const domain = new URL(url).hostname
-      chrome.storage.sync.get(NON_AUTO_KEY).then(({ [NON_AUTO_KEY]: domainList }) => {
-        if (!domainList || isEmpty(domainList)) domainList = []
-        const domainIndex = domainList.indexOf(domain)
-        if (checked && domainIndex !== -1) {
-          domainList.splice(domainIndex, 1)
-        }
-        if (!checked && domainIndex === -1) {
-          domainList.push(domain)
-        }
-        chrome.storage.sync.set({ [NON_AUTO_KEY]: domainList })
-      })
-      chrome.tabs.sendMessage(id, { greeting: 'toggle-enable', data: switchEle.checked })
-    })
-    .catch((e) => {
-      console.log(e.message)
-    })
-})
+new Switcher(switchEle, NON_AUTO_KEY)

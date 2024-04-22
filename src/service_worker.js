@@ -1,5 +1,8 @@
 import { initEventHandler } from '@/utils/extension-action'
 import supabaseClient from '@/lib/supabase'
+import { DetectService } from '@/lib/detect'
+
+new DetectService()
 
 function dbTable() {
   return supabaseClient.from('reader')
@@ -7,8 +10,6 @@ function dbTable() {
 
 const contentReq = {
   'to-get-pattern': toGetPattern,
-  'to-save-detect-ele': toSaveDetectEle,
-  'to-open-window': toOpenWindow,
 }
 
 function domainMatch(domain) {
@@ -59,30 +60,18 @@ async function toGetPattern({ forceUpdate = false, domain = '' }, sendResponse) 
   })
 }
 
-async function toSaveDetectEle(params, sendResponse) {
-  const paginationRes = await dbTable().select('domain').eq('domain', params.domain)
-  if (paginationRes.data.length) {
-    const { data } = await dbTable().update(params).eq('domain', params.domain).select()
-    sendResponse && sendResponse(data[0])
-    refreshPattern()
-  } else {
-    const { data } = await dbTable().insert(params).select()
-    sendResponse && sendResponse(data[0])
-    refreshPattern()
-  }
-}
-
-function toOpenWindow() {
-  chrome.windows.create({
-    url: 'src/window/index.html',
-    type: 'popup',
-    width: 600,
-    height: 300,
-    focused: true,
-    left: 0,
-    top: 0,
-  })
-}
+// async function toSaveDetectEle(params, sendResponse) {
+//   const paginationRes = await dbTable().select('domain').eq('domain', params.domain)
+//   if (paginationRes.data.length) {
+//     const { data } = await dbTable().update(params).eq('domain', params.domain).select()
+//     sendResponse && sendResponse(data[0])
+//     refreshPattern()
+//   } else {
+//     const { data } = await dbTable().insert(params).select()
+//     sendResponse && sendResponse(data[0])
+//     refreshPattern()
+//   }
+// }
 
 function refreshPattern() {
   toGetPattern({ forceUpdate: true })

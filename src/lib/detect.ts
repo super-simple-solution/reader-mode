@@ -9,6 +9,27 @@ enum DetectState {
   Detected = 2,
 }
 
+export class DetectTrigger {
+  startEl: HTMLElement
+  endEl: HTMLElement
+  constructor(startEl: HTMLElement, endEl: HTMLElement) {
+    this.startEl = startEl
+    this.endEl = endEl
+  }
+  initEventHandler() {
+    this.startEl.addEventListener('click', () => {
+      this.startEl.style.display = 'none'
+      this.endEl.style.display = 'block'
+      chrome.runtime.sendMessage({ greeting: 'detect-start' })
+    })
+    this.endEl.addEventListener('click', () => {
+      this.startEl.style.display = 'block'
+      this.endEl.style.display = 'none'
+      chrome.runtime.sendMessage({ greeting: 'detect-cancel' })
+    })
+  }
+}
+
 export class Detect {
   detectState: DetectState = DetectState.Init
   targetEl: HTMLElement | null = null
@@ -32,7 +53,7 @@ export class Detect {
     this.eventInit()
     this.detectState = DetectState.Detecting
   }
-  toCancel() {
+  cancel() {
     this.targetEl && this.targetEl.classList.remove(DETECT_CLASS)
     this.reset()
   }
@@ -127,7 +148,7 @@ export class DetectWindow {
       if (previewData === 'inactive') {
         targetEl.textContent = 'Exit Preview'
         targetEl.setAttribute('data-preview', 'active')
-        chrome.tabs.sendMessage(this.tabId, { greeting: 'to-preview' })
+        this.preview()
       } else {
         targetEl.textContent = 'Preview'
         targetEl.setAttribute('data-preview', 'inactive')
@@ -138,6 +159,9 @@ export class DetectWindow {
   preview() {
     chrome.tabs.sendMessage(this.tabId, {
       greeting: 'to-preview',
+      data: {
+        selector: this.selector,
+      },
     })
   }
   confirm() {
@@ -150,22 +174,47 @@ export class DetectWindow {
 export class DetectService {
   tabId: number = 0
   windowId: number = 0
-  constructor(tabId: number) {
-    this.init(tabId)
+  popupWindowId: number = 0
+  state: DetectState = DetectState.Init
+  constructor() {
+    this.init()
   }
-  init(tabId: number) {
-    this.tabId = tabId
+  init() {
     initEventHandler({
-      confirm: this.confirm,
-      'to-detect': this.preDetect,
+      'detect-start': this.start, //开始检测元素
+      'detect-cancel': this.cancel, // 取消检测元素
+      'detect-done': this.done, // 检测到元素
+      'detect-confirm': this.confirm, // 确认元素
     })
   }
-  destroy() {
-    this.tabId = 0
+  start() {
+    getActiveTab({ currentWindow: false }).then((tabId) => {
+      this.tabId = tabId
+      // chrome.tabs.sendMessage(tabId, {
+      //   greeting: '',
+      // })
+    })
+  }
+  cancel() {
+    this.reset()
+  }
+  done(selector: string) {
+    this.state = DetectState.Detected
+    this.openWindow(selector)
   }
   confirm(selector: string) {
     // TODO: get domain and path
-    chrome.storage.sync.set({ domain_path: selector })
+    chrome.storage.sync.set({ domain_path: selector }).then(() => {
+      this.reset()
+    })
+  }
+  reset() {
+    this.tabId = 0
+    this.popupWindowId = 0
+    this.state = DetectState.Init
+    if (this.popupWindowId) {
+      this.closeWindow()
+    }
   }
   openWindow(selector: string) {
     return chrome.windows
@@ -191,19 +240,7 @@ export class DetectService {
       })
   }
   closeWindow() {
-    chrome.windows.remove(this.windowId)
-  }
-  preDetect() {
-    if (this.windowId !== 0) this.closeWindow()
-    getActiveTab({ currentWindow: false }).then((tabId) => {
-      this.tabId = tabId
-      chrome.tabs.sendMessage(tabId, {
-        greeting: '',
-      })
-    })
-  }
-  postDetect(selector: string) {
-    this.openWindow(selector)
+    chrome.windows.remove(this.popupWindowId)
   }
 }
 
