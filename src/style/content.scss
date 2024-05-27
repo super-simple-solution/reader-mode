@@ -1,0 +1,13 @@
+// use attribute to avoid original website js change classname 
+[data-mark="sss-blur"] {
+  filter: blur(20px);
+  >*{
+    filter: grayscale(1);
+  }
+}
+
+[data-mark="sss-offset"] {
+  position: relative;
+  transition: transform .5s;
+  z-index: 1;
+}

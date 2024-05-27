@@ -6,6 +6,7 @@ const offsetStyle = 'sss-offset'
 class Focus {
   selector: string[]
   isFocus: boolean = false
+  toBeCenter: boolean = true
   originalTransform: string = ''
   constructor(selector: string[], auto_focus?: boolean) {
     this.selector = selector
@@ -24,12 +25,13 @@ class Focus {
       element.setAttribute(attributeKey, blurStyle)
     })
     target.setAttribute(attributeKey, offsetStyle)
+    this.isFocus = true
+    if (!this.toBeCenter) return
     setTimeout(() => {
       target.style.transform = `translateX(
         ${(document.body.clientWidth - target.offsetWidth) / 2 - target.getBoundingClientRect().left}px
       )`
     }, 50)
-    this.isFocus = true
   }
 
   unFocus() {
@@ -39,11 +41,13 @@ class Focus {
     passThrough(target, (element: HTMLElement) => {
       element.removeAttribute(attributeKey)
     })
-    target.style.transform = this.originalTransform || ''
+    this.isFocus = false
+    if (this.toBeCenter) {
+      target.style.transform = this.originalTransform || ''
+    }
     setTimeout(() => {
       target.removeAttribute(attributeKey)
     }, 600)
-    this.isFocus = false
   }
 }
 

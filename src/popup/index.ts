@@ -1,4 +1,5 @@
-import './style.scss'
+import '@/style/index.scss'
+import './index.scss'
 import Switcher from './switch'
 import { DetectTrigger } from '@/lib/detect'
 

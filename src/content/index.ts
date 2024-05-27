@@ -1,5 +1,5 @@
 import hotkeys from 'hotkeys-js'
-import '@/style/index.scss'
+import '@/style/content.scss'
 import { isEmpty } from '@/utils'
 import { initEventHandler } from '@/utils/extension-action'
 import Focus from './blur'

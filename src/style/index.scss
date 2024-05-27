@@ -1,17 +1,3 @@
-// use attribute to avoid original website js change classname 
-[data-mark="sss-blur"] {
-  filter: blur(20px);
-  >*{
-    filter: grayscale(1);
-  }
-}
-
-[data-mark="sss-offset"] {
-  position: relative;
-  transition: transform .5s;
-  z-index: 1;
-}
-
 .sss-detect {
   background-color: rgba(255, 0, 0, 0.4) !important;
 }
@@ -20,4 +6,62 @@
 }
 .sss-confim {
   display: none !important;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 24px;
+}
+
+.switch-input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.switch-action {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.switch-action:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.switch-input:checked + .switch-action {
+  background-color: #2196F3;
+}
+
+.switch-input:focus + .switch-action {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+.switch-input:checked + .switch-action:before {
+  transform: translateX(16px);
+}
+
+/* Rounded switch-actions */
+.switch-action.round {
+  border-radius: 34px;
+}
+
+.switch-action.round:before {
+  border-radius: 50%;
 }

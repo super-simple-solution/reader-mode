@@ -25,6 +25,7 @@
   "host_permissions":  [
     "<all_urls>"
   ],
+  "options_page": "src/options/index.html",
   "content_scripts": [
     {
       "js": [

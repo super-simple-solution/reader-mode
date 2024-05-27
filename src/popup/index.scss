@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+  width: 240px;
+  padding: 10px;
+}
+.title {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.popup-container {
+  width: 250px;
+  height: 400px;
+  background-color: #F5F5F5;
+  padding: 0 30px;
+}
+
+.btn-container {
+  margin-top: 40px;
+}
+
+.btn {
+  width: 100px;
+  height: 48px;
+}
+
+.detect-btn{
+  margin: 20px 0;
+  cursor: pointer;
+  width: 100%;
+  height:  50px;
+  border: 1px solid #2196F3;
+  border-radius: 12px;
+  text-align: center;
+  line-height: 50px;
+}
+.block{
+  display: block;
+}
+
+.cancel {
+  display: none;
+}
