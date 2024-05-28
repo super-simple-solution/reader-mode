@@ -8,6 +8,7 @@ import zipPack from 'vite-plugin-zip-pack'
 import eslintPlugin from 'vite-plugin-eslint'
 import tailwind from 'tailwindcss'
 import manifest from './manifest.json'
+import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   build: {
@@ -49,6 +50,7 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     eslintPlugin(),
+    vue(),
     zipPack({ outDir: './' }),
   ],
   css: {
