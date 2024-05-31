@@ -11,12 +11,19 @@ import manifest from './manifest.json'
 import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
+  server: {
+    port: 5173,
+    strictPort: true,
+    hmr: {
+      port: 5173,
+    },
+  },
   build: {
     minify: 'esbuild',
   },
-  esbuild: {
-    drop: ['console', 'debugger'],
-  },
+  // esbuild: {
+  //   drop: ['console', 'debugger'],
+  // },
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),

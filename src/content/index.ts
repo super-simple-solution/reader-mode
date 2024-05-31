@@ -6,6 +6,7 @@ import Focus from './blur'
 import { Detect } from '@/lib/detect'
 import { NON_AUTO_KEY } from '@/const'
 import { PatternData } from '@/types/local.d'
+import { applyNewStyles } from './util'
 
 let detectInstance: Detect | null = null
 
@@ -14,6 +15,7 @@ const contentReq = {
   'to-detect': toDetect,
   'to-cancel': toCancel,
   'to-preview': toPreview,
+  'update-style': applyNewStyles,
 }
 
 function toDetect() {
@@ -66,6 +68,21 @@ hotkeys('shift+up,esc', function (event: KeyboardEvent, handler) {
     default:
   }
 })
+
+const styleKey = 'style'
+const centerKey = 'center'
+function logStorageChange(changes) {
+  const styleItem = changes[styleKey]
+  const centerItem = changes[centerKey]
+  if (changedItem) {
+    applyNewStyles(styleItem.newValue)
+  }
+  if (centerItem) {
+    detectInstance?.toggleCenter()
+  }
+}
+
+chrome.storage.sync.onChanged.addListener(logStorageChange)
 
 function toggleEnable(enable = true) {
   if (!focusIns) return

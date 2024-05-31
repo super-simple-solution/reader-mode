@@ -1,4 +1,4 @@
-import { initEventHandler } from '@/utils/extension-action'
+import { initEventHandler, getActiveTab } from '@/utils/extension-action'
 import supabaseClient from '@/lib/supabase'
 import { DetectService } from '@/lib/detect'
 
@@ -10,6 +10,7 @@ function dbTable() {
 
 const contentReq = {
   'to-get-pattern': toGetPattern,
+  'update-style': updateStyle,
 }
 
 function domainMatch(domain) {
@@ -78,5 +79,18 @@ function refreshPattern() {
 }
 
 chrome.runtime.onInstalled.addListener(refreshPattern)
+
+function updateStyle(data) {
+  console.log(data, 'data')
+  getActiveTab().then((tab) => {
+    console.log(tab, 'tab')
+    chrome.tabs.sendMessage(tab.id, { greeting: 'update-style', data })
+  })
+  // chrome.storage.sync.set({ style: data }, () => {
+  //   getActiveTab().then((tab) => {
+  //     chrome.tabs.sendMessage(tab.id, { greeting: 'update-style', data })
+  //   })
+  // })
+}
 
 initEventHandler(contentReq)

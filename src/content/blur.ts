@@ -5,49 +5,65 @@ const offsetStyle = 'sss-offset'
 
 class Focus {
   selector: string[]
-  isFocus: boolean = false
+  target: HTMLElement
+  focused: boolean = false
   toBeCenter: boolean = true
+  centered: boolean = false
   originalTransform: string = ''
   constructor(selector: string[], auto_focus?: boolean) {
     this.selector = selector
     if (auto_focus) {
       this.init()
-      this.isFocus = true
+      this.focused = true
     }
   }
 
   init() {
-    if (this.isFocus || !this.selector) return
-    const target = getEleBySelectorList(this.selector, nodeFilter) as HTMLElement
-    if (!target) return
-    this.originalTransform = window.getComputedStyle(target).transform
+    if (this.focused || !this.selector) return
+    this.target = getEleBySelectorList(this.selector, nodeFilter) as HTMLElement
+    if (!this.target) return
+    this.originalTransform = window.getComputedStyle(this.target).transform
     passThrough(target, (element: HTMLElement) => {
       element.setAttribute(attributeKey, blurStyle)
     })
-    target.setAttribute(attributeKey, offsetStyle)
-    this.isFocus = true
+    this.target.setAttribute(attributeKey, offsetStyle)
+    this.focused = true
     if (!this.toBeCenter) return
     setTimeout(() => {
-      target.style.transform = `translateX(
+      this.target.style.transform = `translateX(
         ${(document.body.clientWidth - target.offsetWidth) / 2 - target.getBoundingClientRect().left}px
       )`
     }, 50)
   }
 
   unFocus() {
-    if (!this.isFocus || !this.selector) return
-    const target = getEleBySelectorList(this.selector, nodeFilter) as HTMLElement
-    if (!target) return
-    passThrough(target, (element: HTMLElement) => {
+    if (!this.focused || !this.target) return
+    passThrough(this.target, (element: HTMLElement) => {
       element.removeAttribute(attributeKey)
     })
-    this.isFocus = false
+    this.focused = false
     if (this.toBeCenter) {
-      target.style.transform = this.originalTransform || ''
+      this.target.style.transform = this.originalTransform || ''
     }
     setTimeout(() => {
-      target.removeAttribute(attributeKey)
+      this.target.removeAttribute(attributeKey)
     }, 600)
+  }
+
+  toggleCenter() {
+    this.centered ? this.unCenter() : this.toCenter()
+  }
+
+  toCenter() {
+    if (!this.target || this.centered) return
+    this.originalTransform = window.getComputedStyle(this.target).transform
+    this.target.style.transform = `translateX(
+      ${(document.body.clientWidth - target.offsetWidth) / 2 - this.target.getBoundingClientRect().left}px
+    )`
+  }
+  unCenter() {
+    if (!this.target || !this.centered) return
+    this.target.style.transform = this.originalTransform || ''
   }
 }
 
