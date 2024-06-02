@@ -4,36 +4,31 @@ const blurStyle = 'sss-blur'
 const offsetStyle = 'sss-offset'
 
 class Focus {
-  selector: string[]
   target: HTMLElement
-  focused: boolean = false
-  toBeCenter: boolean = true
-  centered: boolean = false
+  needFocus: boolean = true
+  focused: boolean = false // 已focus?
+  needCenter: boolean = true // 需要居中?
+  centered: boolean = false // 已居中?
   originalTransform: string = ''
-  constructor(selector: string[], auto_focus?: boolean) {
-    this.selector = selector
-    if (auto_focus) {
+  constructor(config: { selector: string[]; needFocus: boolean; needCenter: boolean }) {
+    this.target = getEleBySelectorList(config.selector, nodeFilter) as HTMLElement
+    this.needFocus = config.needFocus
+    this.needCenter = config.needCenter
+    if (!this.target) return
+    if (this.needFocus) {
       this.init()
-      this.focused = true
     }
   }
 
   init() {
-    if (this.focused || !this.selector) return
-    this.target = getEleBySelectorList(this.selector, nodeFilter) as HTMLElement
-    if (!this.target) return
-    this.originalTransform = window.getComputedStyle(this.target).transform
-    passThrough(target, (element: HTMLElement) => {
+    if (this.focused || !this.target) return
+    passThrough(this.target, (element: HTMLElement) => {
       element.setAttribute(attributeKey, blurStyle)
     })
     this.target.setAttribute(attributeKey, offsetStyle)
     this.focused = true
-    if (!this.toBeCenter) return
-    setTimeout(() => {
-      this.target.style.transform = `translateX(
-        ${(document.body.clientWidth - target.offsetWidth) / 2 - target.getBoundingClientRect().left}px
-      )`
-    }, 50)
+    if (!this.needCenter) return
+    setTimeout(this.toCenter, 50)
   }
 
   unFocus() {
@@ -42,8 +37,8 @@ class Focus {
       element.removeAttribute(attributeKey)
     })
     this.focused = false
-    if (this.toBeCenter) {
-      this.target.style.transform = this.originalTransform || ''
+    if (this.needCenter) {
+      this.unCenter()
     }
     setTimeout(() => {
       this.target.removeAttribute(attributeKey)
@@ -58,12 +53,14 @@ class Focus {
     if (!this.target || this.centered) return
     this.originalTransform = window.getComputedStyle(this.target).transform
     this.target.style.transform = `translateX(
-      ${(document.body.clientWidth - target.offsetWidth) / 2 - this.target.getBoundingClientRect().left}px
+      ${(document.body.clientWidth - this.target.offsetWidth) / 2 - this.target.getBoundingClientRect().left}px
     )`
+    this.centered = true
   }
   unCenter() {
     if (!this.target || !this.centered) return
     this.target.style.transform = this.originalTransform || ''
+    this.centered = false
   }
 }
 
@@ -72,16 +69,17 @@ function passThrough(element: HTMLElement, fn: (element: HTMLElement) => undefin
   const parent = element.parentElement
   const elementList = parent?.children
   passThrough(parent as HTMLElement, fn)
-  if (!elementList) return
+  if (!elementList || !elementList.length) return
   for (let i = 0; i < elementList.length; i++) {
     if (elementList[i] === element) continue
     fn(elementList[i] as HTMLElement)
   }
 }
 
-function nodeFilter(element: Element): boolean {
+function nodeFilter(element: HTMLElement): boolean {
   const content = element.textContent
-  return !!content && content.length > 200
+  const height = element.offsetHeight
+  return !!content && height > 500
 }
 
 export default Focus

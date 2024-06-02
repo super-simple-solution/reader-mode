@@ -37,13 +37,17 @@ export function createEle(option: {
   return el
 }
 
-export function getEleBySelectorList(selectorList: string[], filter: (element: Element) => boolean = () => true) {
-  let elRes
+export function getEleBySelectorList(
+  selectorList: string[],
+  filter: (element: HTMLElement) => boolean = () => true,
+): HTMLElement | null {
   for (const selector of selectorList) {
-    elRes = getEle(selector)
-    if (elRes && filter(elRes)) break
+    const elRes = getEle(selector) as HTMLElement
+    if (elRes && filter(elRes)) {
+      return elRes
+    }
   }
-  return elRes
+  return null
 }
 
 export function getNumber(str: string | null | undefined): number {

@@ -1,5 +1,7 @@
 import { getEle } from '@/utils'
 
-export function applyNewStyles(form: { fontFamily: any }) {
-  getEle('[data-mark="sss-offset"]')?.style.fontFamily = form.fontFamily
+export function applyNewStyles(data: { fontFamily: any }) {
+  const contentEle = getEle('[data-mark="sss-offset"]') as HTMLElement
+  if (!contentEle) return
+  contentEle.style.fontFamily = data.fontFamily
 }

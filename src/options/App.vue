@@ -8,7 +8,6 @@ const form = reactive({
 })
 
 const updateStyles = () => {
-  // chrome.runtime.sendMessage({ greeting: 'update-style', data: form })
   chrome.storage.sync.set({ style: toRaw(form) })
 }
 </script>
