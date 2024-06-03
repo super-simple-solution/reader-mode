@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import { FontFamilyList } from './const'
-import { reactive, toRaw } from 'vue'
+import { reactive, ref, toRaw } from 'vue'
 const form = reactive({
+  reader_mode: false,
   center: true,
   fontFamily: 'default',
 })
+
+const reader_mode = ref(true)
 
 const updateStyles = () => {
   chrome.storage.sync.set({ style: toRaw(form) })
@@ -17,6 +20,9 @@ const updateStyles = () => {
     <div class="container">
       <div class="sider-bar">
         <el-form label-position="top" label-width="80px">
+          <el-form-item label="阅读模式">
+            <el-checkbox v-model="reader_mode">{{ reader_mode ? '关闭' : '开启' }}</el-checkbox>
+          </el-form-item>
           <el-form-item label="内容居中">
             <el-checkbox v-model="form.center">居中</el-checkbox>
           </el-form-item>

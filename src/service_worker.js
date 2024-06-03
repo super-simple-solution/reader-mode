@@ -93,4 +93,22 @@ function updateStyle(data) {
   // })
 }
 
+chrome.action.onClicked.addListener(async (tab) => {
+  if (tab.url === 'chrome://extensions/') {
+    chrome.notifications.create({
+      type: 'basic',
+      iconUrl: 'assets/icons/128.png',
+      title: 'readerMode',
+      message: '请在网页上使用',
+    })
+    return
+  }
+  try {
+    // 当用户点击扩展图标时，尝试打开侧边栏
+    await chrome.sidePanel.open({ windowId: tab.windowId })
+  } catch (error) {
+    console.error('Error opening side panel:', error)
+  }
+})
+
 initEventHandler(contentReq)

@@ -14,18 +14,19 @@
     "extension_page": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },
   "action": {
-    "default_title": "popup",
-    "default_popup": "src/popup/index.html"
+    "default_title": "reader"
   },
   "background": {
     "service_worker": "src/service_worker.js",
     "type": "module"
   },
-  "permissions": ["storage", "tabs",  "activeTab"],
+  "permissions": ["storage", "tabs",  "activeTab", "sidePanel", "notifications"],
   "host_permissions":  [
     "<all_urls>"
   ],
-  "options_page": "src/options/index.html",
+  "side_panel": {
+    "default_path": "src/sidepanel/index.html"
+  },
   "content_scripts": [
     {
       "js": [
