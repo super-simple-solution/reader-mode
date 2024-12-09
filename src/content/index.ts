@@ -3,33 +3,12 @@ import '@/style/content.scss'
 import { isEmpty } from '@/utils'
 import { initEventHandler } from '@/utils/extension-action'
 import Focus from './focus'
-import { Detect } from '@/lib/detect'
 import { NON_AUTO_KEY } from '@/const'
 import { PatternData } from '@/types/local.d'
 import { applyNewStyles } from './util'
 
-let detectInstance: Detect | null = null
-
 const contentReq = {
   'toggle-enable': toggleEnable,
-  'to-detect': toDetect,
-  'to-cancel': toCancel,
-  'to-preview': toPreview,
-}
-
-function toDetect() {
-  if (!detectInstance) {
-    detectInstance = new Detect()
-  }
-  detectInstance.toDetect()
-}
-
-function toCancel() {
-  detectInstance && detectInstance.cancel()
-}
-
-function toPreview({ selector }: { selector: string }) {
-  detectInstance && detectInstance.preview(selector)
 }
 
 initEventHandler(contentReq)
