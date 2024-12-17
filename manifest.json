@@ -1,6 +1,6 @@
 {
   "name": "Reading Mode",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "manifest_version": 3,
   "description": "Enjoy a more focused reading experience",
   "icons": {
@@ -34,7 +34,7 @@
       ],
       "run_at": "document_idle",
       "matches": [
-        "<all_urls>"
+        "https://baijiahao.baidu.com/*"
       ],
       "all_frames": false
     }

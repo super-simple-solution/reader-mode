@@ -43,10 +43,14 @@ init()
 hotkeys('shift+up,esc', function (event: KeyboardEvent, handler) {
   switch (handler.key) {
     case 'shift+up':
-      focusIns && focusIns.init()
+      if (focusIns) {
+        focusIns.init()
+      }
       break
     case 'esc':
-      focusIns && focusIns.unFocus()
+      if (focusIns) {
+        focusIns.unFocus()
+      }
       break
     default:
   }
