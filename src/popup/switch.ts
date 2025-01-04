@@ -1,5 +1,5 @@
-import { getActiveTab } from '@/utils/extension-action'
 import { isEmpty } from '@/utils'
+import { getActiveTab } from '@/utils/extension-action'
 
 export default class {
   el: HTMLInputElement
@@ -41,7 +41,7 @@ export default class {
         chrome.tabs.sendMessage(id, { greeting: 'toggle-enable', data: this.el.checked })
       })
       .catch((e) => {
-        console.log(e.message)
+        console.error(e.message)
       })
   }
 }

@@ -10,7 +10,7 @@
     "64": "assets/icons/64.png",
     "128": "assets/icons/128.png"
   },
-  "content_security_policy":{
+  "content_security_policy": {
     "extension_page": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   },
   "action": {
@@ -20,22 +20,16 @@
     "service_worker": "src/service_worker.js",
     "type": "module"
   },
-  "permissions": ["storage", "tabs",  "activeTab", "sidePanel", "notifications"],
-  "host_permissions":  [
-    "<all_urls>"
-  ],
+  "permissions": ["storage", "tabs", "activeTab", "sidePanel", "notifications"],
+  "host_permissions": ["<all_urls>"],
   "side_panel": {
     "default_path": "src/sidepanel/index.html"
   },
   "content_scripts": [
     {
-      "js": [
-        "src/content/index.ts"
-      ],
+      "js": ["src/content/index.ts"],
       "run_at": "document_idle",
-      "matches": [
-        "https://baijiahao.baidu.com/*"
-      ],
+      "matches": ["https://baijiahao.baidu.com/*"],
       "all_frames": false
     }
   ]

@@ -1,14 +1,14 @@
-import { resolve } from 'path'
-import { defineConfig } from 'vite'
+import path from 'node:path'
 import { crx } from '@crxjs/vite-plugin'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import zipPack from 'vite-plugin-zip-pack'
-import eslintPlugin from 'vite-plugin-eslint'
-import tailwind from 'tailwindcss'
-import manifest from './manifest.json'
 import vue from '@vitejs/plugin-vue'
+import tailwind from 'tailwindcss'
+import AutoImport from 'unplugin-auto-import/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
+import { defineConfig } from 'vite'
+import biomePlugin from 'vite-plugin-biome'
+import zipPack from 'vite-plugin-zip-pack'
+import manifest from './manifest.json'
 
 export default defineConfig({
   server: {
@@ -21,12 +21,9 @@ export default defineConfig({
   build: {
     minify: 'esbuild',
   },
-  // esbuild: {
-  //   drop: ['console', 'debugger'],
-  // },
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src'),
+      '@': path.resolve(__dirname, './src'),
     },
   },
   output: {
@@ -45,19 +42,19 @@ export default defineConfig({
       ],
       // global imports to register
       imports: ['vue'],
-      eslintrc: {
-        enabled: true, // Default `false`
-        filepath: './.eslintrc-auto-import.json', // Default `./.eslintrc-auto-import.json`
-        globalsPropValue: true, // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
-      },
       resolvers: [ElementPlusResolver()],
       dts: './auto-imports.d.ts',
     }),
     Components({
       resolvers: [ElementPlusResolver()],
     }),
-    eslintPlugin(),
     vue(),
+    biomePlugin({
+      mode: 'check',
+      files: '.',
+      applyFixes: true,
+      failOnError: true,
+    }),
     zipPack({ outDir: './' }),
   ],
   css: {

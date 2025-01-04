@@ -1,14 +1,15 @@
 import hotkeys from 'hotkeys-js'
 import '@/style/content.scss'
+import { NON_AUTO_KEY } from '@/const'
+import type { FocusConfig, PatternData } from '@/types/local.d'
 import { isEmpty } from '@/utils'
 import { initEventHandler } from '@/utils/extension-action'
 import Focus from './focus'
-import { NON_AUTO_KEY } from '@/const'
-import { PatternData } from '@/types/local.d'
 import { applyNewStyles } from './util'
 
 const contentReq = {
   'toggle-enable': toggleEnable,
+  'update-reader-mode': handleReaderMode,
 }
 
 initEventHandler(contentReq)
@@ -18,7 +19,9 @@ function init() {
   const domain = location.hostname
   chrome.storage.sync.get(NON_AUTO_KEY).then(({ [NON_AUTO_KEY]: domainList }) => {
     const needFocus =
-      !domainList || isEmpty(domainList) || !domainList.find((item: string) => domain === item || item.endsWith(domain))
+      !domainList ||
+      isEmpty(domainList) ||
+      !domainList.find((item: string) => domain === item || item.endsWith(domain))
     if (!needFocus) return
     chrome.runtime
       .sendMessage({
@@ -40,7 +43,7 @@ function init() {
 
 init()
 
-hotkeys('shift+up,esc', function (event: KeyboardEvent, handler) {
+hotkeys('shift+up,esc', (_, handler) => {
   switch (handler.key) {
     case 'shift+up':
       if (focusIns) {
@@ -74,4 +77,13 @@ chrome.storage.sync.onChanged.addListener(logStorageChange)
 function toggleEnable(enable = true) {
   if (!focusIns) return
   enable ? focusIns?.init() : focusIns.unFocus()
+}
+
+function handleReaderMode(focusConfig: FocusConfig) {
+  if (!focusIns) return
+  if (focusConfig.reader_mode) {
+    focusIns.init()
+  } else {
+    focusIns.unFocus()
+  }
 }

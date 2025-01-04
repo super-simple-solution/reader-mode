@@ -1,5 +1,5 @@
-import { initEventHandler, getActiveTab } from '@/utils/extension-action'
 import supabaseClient from '@/lib/supabase'
+import { getActiveTab, initEventHandler } from '@/utils/extension-action'
 
 function dbTable() {
   return supabaseClient.from('reader')
@@ -16,8 +16,8 @@ function domainMatch(domain) {
 
 function domainPropertyMatch(domain, isGeneric = false) {
   return (item) => {
-    let curDomain = item.domain
-    let res = domain === curDomain || domain.endsWith(curDomain)
+    const curDomain = item.domain
+    const res = domain === curDomain || domain.endsWith(curDomain)
     return isGeneric ? res || curDomain === '*' : res
   }
 }
@@ -67,9 +67,9 @@ function refreshPattern() {
 chrome.runtime.onInstalled.addListener(refreshPattern)
 
 function updateStyle(data) {
-  console.log(data, 'data')
+  console.debug(data, 'data')
   getActiveTab().then((tab) => {
-    console.log(tab, 'tab')
+    console.debug(tab, 'tab')
     chrome.tabs.sendMessage(tab.id, { greeting: 'update-style', data })
   })
   // chrome.storage.sync.set({ style: data }, () => {
