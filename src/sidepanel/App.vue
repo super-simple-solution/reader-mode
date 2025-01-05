@@ -1,42 +1,41 @@
 <script setup lang="ts">
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
-import { reactive, toRaw, watch } from 'vue'
+import { computed, reactive, watch } from 'vue'
 import { FontFamilyList } from './const'
 
-const form = reactive({
+interface FormState {
+  reader_mode: boolean
+  center: boolean
+  font_family: string
+}
+
+const form = reactive<FormState>({
   reader_mode: true,
   center: true,
   font_family: 'default',
 })
 
-// const updateStyles = () => {
-//   chrome.storage.sync.set({ style: toRaw(form) })
-// }
+// biome-ignore lint/correctness/noUnusedVariables: <explanation>
+const readerModeLabel = computed(() => (form.reader_mode ? '关闭' : '开启'))
 
-watch(
-  form,
-  (newForm) => {
-    // updateStyles()
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      if (tabs[0]?.id) {
-        chrome.tabs.sendMessage(tabs[0].id, {
-          greeting: 'update-reader-mode',
-          focusConfig: newForm,
-        })
-      }
-    })
-  },
-  { deep: true },
-)
+const updatePageStyles = () => {
+  chrome.storage.sync.set({ style: toRaw(form) })
+  chrome.runtime.sendMessage({
+    action: 'updateStyles',
+    newForm: form,
+  })
+}
+
+watch(form, updatePageStyles, { deep: true })
 </script>
 
 <template>
   <el-config-provider :locale="zhCn">
     <div class="container">
-      <div class="sider-bar">
+      <div class="sidepanel">
         <el-form label-position="top" label-width="80px">
           <el-form-item label="阅读模式">
-            <el-checkbox v-model="form.reader_mode">{{ form.reader_mode ? '关闭' : '开启' }}</el-checkbox>
+            <el-checkbox v-model="form.reader_mode">{{ readerModeLabel }}</el-checkbox>
           </el-form-item>
           <el-form-item label="内容居中">
             <el-checkbox v-model="form.center">居中</el-checkbox>

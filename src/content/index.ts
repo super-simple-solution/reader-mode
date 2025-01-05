@@ -9,7 +9,6 @@ import { applyNewStyles } from './util'
 
 const contentReq = {
   'toggle-enable': toggleEnable,
-  'update-reader-mode': handleReaderMode,
 }
 
 initEventHandler(contentReq)
@@ -79,11 +78,33 @@ function toggleEnable(enable = true) {
   enable ? focusIns?.init() : focusIns.unFocus()
 }
 
-function handleReaderMode(focusConfig: FocusConfig) {
-  if (!focusIns) return
-  if (focusConfig.reader_mode) {
-    focusIns.init()
-  } else {
-    focusIns.unFocus()
+chrome.runtime.onMessage.addListener((message) => {
+  // biome-ignore lint/suspicious/noConsoleLog: <explanation>
+  console.log('updateRecived', message)
+  if (message.action === 'updateStyles') {
+    // biome-ignore lint/suspicious/noConsoleLog: <explanation>
+    console.log('updatePageStyles', message)
+    updatePageStyles(message.newForm)
   }
+})
+
+function updatePageStyles({ reader_mode, center, font_family }: FocusConfig) {
+  // biome-ignore lint/suspicious/noConsoleLog: <explanation>
+  console.log('updatePageStyles', reader_mode, center, font_family)
+  // 修改背景色
+  if (reader_mode) {
+    focusIns?.toCenter()
+  } else {
+    focusIns?.unCenter()
+  }
+
+  // 居中内容
+  if (center) {
+    focusIns?.toCenter()
+  } else {
+    focusIns?.unCenter()
+  }
+
+  // 设置字体
+  document.body.style.fontFamily = font_family === 'default' ? 'Arial, sans-serif' : font_family
 }
