@@ -12,9 +12,9 @@ class Focus {
   originalTransform = ''
   constructor(config: { selector: string[]; needFocus: boolean; needCenter: boolean }) {
     this.target = getEleBySelectorList(config.selector, nodeFilter) as HTMLElement
+    if (!this.target) return
     this.needFocus = config.needFocus
     this.needCenter = config.needCenter
-    if (!this.target) return
     if (this.needFocus) {
       this.init()
     }

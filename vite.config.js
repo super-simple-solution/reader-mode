@@ -3,8 +3,6 @@ import { crx } from '@crxjs/vite-plugin'
 import vue from '@vitejs/plugin-vue'
 import tailwind from 'tailwindcss'
 import AutoImport from 'unplugin-auto-import/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
 import biomePlugin from 'vite-plugin-biome'
 import zipPack from 'vite-plugin-zip-pack'
@@ -26,9 +24,6 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-  output: {
-    sourcemap: 'inline',
-  },
   plugins: [
     crx({ manifest }),
     AutoImport({
@@ -42,11 +37,7 @@ export default defineConfig({
       ],
       // global imports to register
       imports: ['vue'],
-      resolvers: [ElementPlusResolver()],
       dts: './auto-imports.d.ts',
-    }),
-    Components({
-      resolvers: [ElementPlusResolver()],
     }),
     vue(),
     biomePlugin({

@@ -9,6 +9,7 @@ import { applyNewStyles } from './util'
 
 const contentReq = {
   'toggle-enable': toggleEnable,
+  'update-style': updatePageStyles,
 }
 
 initEventHandler(contentReq)
@@ -77,16 +78,6 @@ function toggleEnable(enable = true) {
   if (!focusIns) return
   enable ? focusIns?.init() : focusIns.unFocus()
 }
-
-chrome.runtime.onMessage.addListener((message) => {
-  // biome-ignore lint/suspicious/noConsoleLog: <explanation>
-  console.log('updateRecived', message)
-  if (message.action === 'updateStyles') {
-    // biome-ignore lint/suspicious/noConsoleLog: <explanation>
-    console.log('updatePageStyles', message)
-    updatePageStyles(message.newForm)
-  }
-})
 
 function updatePageStyles({ reader_mode, center, font_family }: FocusConfig) {
   // biome-ignore lint/suspicious/noConsoleLog: <explanation>
