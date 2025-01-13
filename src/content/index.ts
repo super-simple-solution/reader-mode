@@ -5,6 +5,7 @@ import type { FocusConfig, PatternData } from '@/types/local.d'
 import { isEmpty } from '@/utils'
 import { initEventHandler } from '@/utils/extension-action'
 import Focus from './focus'
+import rightMenu from './rightMenu'
 import { applyNewStyles } from './util'
 
 const contentReq = {
@@ -99,3 +100,5 @@ function updatePageStyles({ reader_mode, center, font_family }: FocusConfig) {
   // 设置字体
   document.body.style.fontFamily = font_family === 'default' ? 'Arial, sans-serif' : font_family
 }
+
+rightMenu()
