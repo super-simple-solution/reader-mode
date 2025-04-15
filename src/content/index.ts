@@ -4,7 +4,7 @@ import { isEmpty } from '@/utils'
 import { initEventHandler } from '@/utils/extension-action'
 import Focus from './focus'
 import { NON_AUTO_KEY } from '@/const'
-import { PatternData } from '@/types/local.d'
+import type { PatternData } from '@/types/local.d'
 import { applyNewStyles } from './util'
 
 const contentReq = {
@@ -40,7 +40,7 @@ function init() {
 
 init()
 
-hotkeys('shift+up,esc', function (event: KeyboardEvent, handler) {
+hotkeys('shift+up,esc', (event: KeyboardEvent, handler) => {
   switch (handler.key) {
     case 'shift+up':
       if (focusIns) {
