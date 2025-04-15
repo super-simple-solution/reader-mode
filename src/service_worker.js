@@ -1,5 +1,5 @@
-import { initEventHandler, getActiveTab } from '@/utils/extension-action'
 import supabaseClient from '@/lib/supabase'
+import { getActiveTab, initEventHandler } from '@/utils/extension-action'
 
 function dbTable() {
   return supabaseClient.from('reader')
@@ -7,7 +7,7 @@ function dbTable() {
 
 const contentReq = {
   'to-get-pattern': toGetPattern,
-  'update-style': updateStyle,
+  // 'update-style': updateStyle,
 }
 
 function domainMatch(domain) {
@@ -16,8 +16,8 @@ function domainMatch(domain) {
 
 function domainPropertyMatch(domain, isGeneric = false) {
   return (item) => {
-    let curDomain = item.domain
-    let res = domain === curDomain || domain.endsWith(curDomain)
+    const curDomain = item.domain
+    const res = domain === curDomain || domain.endsWith(curDomain)
     return isGeneric ? res || curDomain === '*' : res
   }
 }
@@ -66,18 +66,18 @@ function refreshPattern() {
 
 chrome.runtime.onInstalled.addListener(refreshPattern)
 
-function updateStyle(data) {
-  console.log(data, 'data')
-  getActiveTab().then((tab) => {
-    console.log(tab, 'tab')
-    chrome.tabs.sendMessage(tab.id, { greeting: 'update-style', data })
-  })
-  // chrome.storage.sync.set({ style: data }, () => {
-  //   getActiveTab().then((tab) => {
-  //     chrome.tabs.sendMessage(tab.id, { greeting: 'update-style', data })
-  //   })
-  // })
-}
+// function updateStyle(data) {
+//   console.debug(data, 'data')
+//   getActiveTab().then((tab) => {
+//     console.debug(tab, 'tab')
+//     chrome.tabs.sendMessage(tab.id, { greeting: 'update-style', data })
+//   })
+//   // chrome.storage.sync.set({ style: data }, () => {
+//   //   getActiveTab().then((tab) => {
+//   //     chrome.tabs.sendMessage(tab.id, { greeting: 'update-style', data })
+//   //   })
+//   // })
+// }
 
 chrome.action.onClicked.addListener(async (tab) => {
   if (tab.url === 'chrome://extensions/') {

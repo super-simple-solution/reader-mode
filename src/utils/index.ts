@@ -15,7 +15,7 @@ interface DynamicObject {
 export function getAttrs(el: Element) {
   const res = {} as DynamicObject
   for (const key in el.attributes) {
-    if (isNaN(+key)) {
+    if (Number.isNaN(+key)) {
       res[key] = el.attributes[key].value
     }
   }

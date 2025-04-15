@@ -1,14 +1,16 @@
 import hotkeys from 'hotkeys-js'
 import '@/style/content.scss'
+import { NON_AUTO_KEY } from '@/const'
+import type { FocusConfig, PatternData } from '@/types/local.d'
 import { isEmpty } from '@/utils'
 import { initEventHandler } from '@/utils/extension-action'
 import Focus from './focus'
-import { NON_AUTO_KEY } from '@/const'
-import type { PatternData } from '@/types/local.d'
+import rightMenu from './rightMenu'
 import { applyNewStyles } from './util'
 
 const contentReq = {
   'toggle-enable': toggleEnable,
+  'update-style': updatePageStyles,
 }
 
 initEventHandler(contentReq)
@@ -18,7 +20,9 @@ function init() {
   const domain = location.hostname
   chrome.storage.sync.get(NON_AUTO_KEY).then(({ [NON_AUTO_KEY]: domainList }) => {
     const needFocus =
-      !domainList || isEmpty(domainList) || !domainList.find((item: string) => domain === item || item.endsWith(domain))
+      !domainList ||
+      isEmpty(domainList) ||
+      !domainList.find((item: string) => domain === item || item.endsWith(domain))
     if (!needFocus) return
     chrome.runtime
       .sendMessage({
@@ -40,7 +44,7 @@ function init() {
 
 init()
 
-hotkeys('shift+up,esc', (event: KeyboardEvent, handler) => {
+hotkeys('shift+up,esc', (_, handler) => {
   switch (handler.key) {
     case 'shift+up':
       if (focusIns) {
@@ -75,3 +79,26 @@ function toggleEnable(enable = true) {
   if (!focusIns) return
   enable ? focusIns?.init() : focusIns.unFocus()
 }
+
+function updatePageStyles({ reader_mode, center, font_family }: FocusConfig) {
+  // biome-ignore lint/suspicious/noConsoleLog: <explanation>
+  console.log('updatePageStyles', reader_mode, center, font_family)
+  // 修改背景色
+  if (reader_mode) {
+    focusIns?.toCenter()
+  } else {
+    focusIns?.unCenter()
+  }
+
+  // 居中内容
+  if (center) {
+    focusIns?.toCenter()
+  } else {
+    focusIns?.unCenter()
+  }
+
+  // 设置字体
+  document.body.style.fontFamily = font_family === 'default' ? 'Arial, sans-serif' : font_family
+}
+
+rightMenu()

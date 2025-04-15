@@ -5,16 +5,16 @@ const offsetStyle = 'sss-offset'
 
 class Focus {
   target: HTMLElement
-  needFocus: boolean = true
-  focused: boolean = false // 已focus?
-  needCenter: boolean = true // 需要居中?
-  centered: boolean = false // 已居中?
-  originalTransform: string = ''
+  needFocus = true
+  focused = false // 已focus?
+  needCenter = true // 需要居中?
+  centered = false // 已居中?
+  originalTransform = ''
   constructor(config: { selector: string[]; needFocus: boolean; needCenter: boolean }) {
     this.target = getEleBySelectorList(config.selector, nodeFilter) as HTMLElement
+    if (!this.target) return
     this.needFocus = config.needFocus
     this.needCenter = config.needCenter
-    if (!this.target) return
     if (this.needFocus) {
       this.init()
     }
